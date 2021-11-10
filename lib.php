@@ -459,6 +459,22 @@ function mumie_update_multiple_tasks($mumie) {
                 foreach ($selectedproperties as $property) {
                     $record->$property = $mumie->$property;
                 }
+//                debugging("record: " . json_encode($record));
+                $record->gradepass = $mumie->gradepass;
+                //$modinfo = get_fast_modinfo($mumie->course);
+//                debugging("modinf: " . json_encode($modinfo));
+
+                $cm = \mod_mumie\locallib::get_coursemodule_from_mumie($record->id);
+//                debugging("CM: " . json_encode($cm->id));
+                $record->coursemodule = $cm->id;
+                $record->instance = $record->id;
+                $record->modulename = 'mumie';
+                $record->cmidnumber ='';
+                $cm = get_coursemodule_from_id('mumie', $cm->id, $record->course, false, MUST_EXIST);
+                debugging("CM: " . json_encode($cm));
+                debugging("record" . json_encode($record));
+                edit_module_post_actions($record, $DB->get_record('course',array ('id' => $mumie->course)));
+
                 mumie_update_instance($record, []);
             }
             $updatedtasks = count($selectedtasks);

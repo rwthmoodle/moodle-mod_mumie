@@ -219,4 +219,11 @@ class locallib {
         }
         return $mumie->duedate;
     }
+
+    public static function get_coursemodule_from_mumie($mumieid) {
+        global $DB;
+        $module = $DB->get_record('modules', array('name' => 'mumie'));
+        $coursemodule = $DB->get_record("course_modules", array('instance' => $mumieid, 'module' => $module->id));
+        return $coursemodule;
+    }
 }
